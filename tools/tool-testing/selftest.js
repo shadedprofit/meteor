@@ -1582,6 +1582,9 @@ var getFilteredTests = function (options) {
       } else if (options.onlyChanged &&
                  test.fileHash === testState.lastPassedHashes[test.file]) {
         newTags.push('unchanged');
+      } else if (options.excludeRegexp &&
+                 options.excludeRegexp.test(test.name)) {
+        newTags.push('excluded');
       }
 
       // We make sure to not run galaxy tests unless the user explicitly asks us
@@ -1605,6 +1608,9 @@ var getFilteredTests = function (options) {
   }
   if (options.testRegexp) {
     tagsToSkip.push('non-matching');
+  }
+  if (options.excludeRegexp) {
+    tagsToSkip.push('excluded');
   }
   if (options.onlyChanged) {
     tagsToSkip.push('unchanged');
